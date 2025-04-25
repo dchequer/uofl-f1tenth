@@ -15,7 +15,7 @@ class WaypointEditor:
         self.load_map()
         self.load_waypoints()
         self.setup_plot()
-
+    
     def load_map(self):
         with open(self.map_yaml_path, 'r') as f:
             yaml_data = yaml.safe_load(f)
@@ -44,7 +44,7 @@ class WaypointEditor:
     def setup_plot(self):
         self.fig, self.ax = plt.subplots(figsize=(10, 10))
         self.fig.patch.set_facecolor('white')
-        self.ax.imshow(self.img, origin='lower', extent=self.extent)
+        self.ax.imshow(self.img, origin='upper', extent=self.extent)
         self.scatter = None
         self.spline_plot, = self.ax.plot([], [], 'r-', lw=2, label='Interpolated Path')
         self.texts = []
@@ -108,15 +108,15 @@ class WaypointEditor:
             writer.writerow(['x', 'y'])
             for wp in self.waypoints:
                 writer.writerow([wp[0], wp[1]])
-        print(f"✅ Clicked waypoints saved to {self.waypoints_path}")
+        print(f"Clicked waypoints saved to {self.waypoints_path}")
 
         # Save interpolated spline
         if len(self.waypoints) >= 3:
             smooth_path = os.path.join(os.path.dirname(self.waypoints_path), 'waypoints_smooth.csv')
             self.save_spline(smooth_path)
-            print(f"✅ Interpolated waypoints saved to {smooth_path}")
+            print(f"Interpolated waypoints saved to {smooth_path}")
         else:
-            print("⚠️ Need at least 3 points for spline interpolation.")
+            print("Need at least 3 points for spline interpolation.")
 
     def draw_spline(self, wpx, wpy):
         if len(wpx) >= 3:
@@ -141,7 +141,7 @@ class WaypointEditor:
                 for x, y in zip(x_smooth, y_smooth):
                     writer.writerow([x, y])
         else:
-            print("⚠️ Not enough points to generate smooth path.")
+            print("Not enough points to generate smooth path.")
 
 
 if __name__ == '__main__':
