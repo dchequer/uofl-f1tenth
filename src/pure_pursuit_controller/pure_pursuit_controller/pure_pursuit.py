@@ -29,7 +29,7 @@ class PurePursuitNode(Node):
     def __init__(self):
         super().__init__("pure_pursuit_node")
 
-        self.declare_parameter("lookahead_distance", 10)
+        self.declare_parameter("lookahead_distance", 10.0)
         self.lookahead_distance = (
             self.get_parameter("lookahead_distance").get_parameter_value().double_value
         )
@@ -50,8 +50,8 @@ class PurePursuitNode(Node):
 
         self.current_pose = None
         self.current_waypoint_index = 0
-        self.arrival_threshold = 0.5  # meters
-        self.speed = 5  # Target speed
+        self.arrival_threshold = 2.0 
+        self.speed = 2.5  # Target speed
         self.actual_speed = 0.0
 
         self.create_subscription(Odometry, "/ego_racecar/odom", self.odom_callback, 10)
@@ -133,11 +133,15 @@ class PurePursuitNode(Node):
         return curvature
 
     def publish_drive(self, steering_angle):
+        max_steering_angle = 0.4189  # radians (24 degrees)
+        angle_ratio = abs(steering_angle) / max_steering_angle
+        speed = self.speed * (1.0 - 0.5 * angle_ratio)
+
         drive_msg = AckermannDriveStamped()
         drive_msg.header.frame_id = "base_link"
         drive_msg.header.stamp = self.get_clock().now().to_msg()
-        drive_msg.drive.steering_angle = steering_angle
-        drive_msg.drive.speed = self.speed if self.speed is not None else 0.0
+        drive_msg.drive.steering_angle = max(min(steering_angle, self.max_steering_angle), -self.max_steering_angle)
+        drive_msg.drive.speed = speed
         self.cmd_pub.publish(drive_msg)
 
     def stop_drive(self):

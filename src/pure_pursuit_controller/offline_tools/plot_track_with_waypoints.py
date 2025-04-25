@@ -64,7 +64,10 @@ class WaypointEditor:
         if self.scatter is not None and self.scatter.axes is not None:
             self.scatter.remove()
         for txt in self.texts:
-            txt.remove()
+            try:
+                txt.remove()
+            except ValueError:
+                pass
 
         if self.waypoints:
             wpx, wpy = zip(*self.waypoints)
