@@ -13,10 +13,7 @@ class WaypointRecorder(Node):
         self.waypoints = []
 
         self.subscription = self.create_subscription(
-            PoseStamped,
-            "/goal_pose",  # 🟢 THIS is what 2D Goal Pose uses
-            self.goal_pose_callback,
-            10,
+            PoseStamped, "/goal_pose", self.goal_pose_callback, 10
         )
 
         self.get_logger().info(

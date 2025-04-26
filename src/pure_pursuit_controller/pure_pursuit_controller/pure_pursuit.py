@@ -50,7 +50,7 @@ class PurePursuitNode(Node):
 
         self.current_pose = None
         self.current_waypoint_index = 0
-        self.arrival_threshold = 2.0 
+        self.arrival_threshold = 2.0
         self.speed = 2.5  # Target speed
         self.actual_speed = 0.0
 
@@ -129,7 +129,7 @@ class PurePursuitNode(Node):
         if x_r == 0:
             return 0.0
 
-        curvature = (2 * y_r) / (self.lookahead_distance**2)
+        curvature = (2 * y_r) / (self.lookahead_distance ** 2)
         return curvature
 
     def publish_drive(self, steering_angle):
@@ -140,7 +140,9 @@ class PurePursuitNode(Node):
         drive_msg = AckermannDriveStamped()
         drive_msg.header.frame_id = "base_link"
         drive_msg.header.stamp = self.get_clock().now().to_msg()
-        drive_msg.drive.steering_angle = max(min(steering_angle, self.max_steering_angle), -self.max_steering_angle)
+        drive_msg.drive.steering_angle = max(
+            min(steering_angle, self.max_steering_angle), -self.max_steering_angle
+        )
         drive_msg.drive.speed = speed
         self.cmd_pub.publish(drive_msg)
 

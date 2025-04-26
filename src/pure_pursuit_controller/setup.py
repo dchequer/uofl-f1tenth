@@ -26,6 +26,6 @@ setup(
             "pure_pursuit = pure_pursuit_controller.pure_pursuit:main",
             "waypoint_recorder = pure_pursuit_controller.waypoint_recorder:main",
             "waypoint_viz = pure_pursuit_controller.waypoint_viz:main",
-        ],
+        ]
     },
 )

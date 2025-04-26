@@ -18,8 +18,6 @@ setup(
     license="TODO: License declaration",
     tests_require=["pytest"],
     entry_points={
-        "console_scripts": [
-            "keyboard_teleop = keyboard_teleop.keyboard_teleop:main",
-        ],
+        "console_scripts": ["keyboard_teleop = keyboard_teleop.keyboard_teleop:main"]
     },
 )
